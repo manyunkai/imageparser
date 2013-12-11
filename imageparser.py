@@ -284,6 +284,9 @@ class ImageParser(object):
         return self._load()
 
     def _load(self):
+        if getattr(self, 'image', None):
+            return True
+
         handler = ImageIOTools.parse if self.handle_by == 'buffer' else ImageIOTools.open
 
         # 获取文件名
@@ -323,12 +326,13 @@ class ImageParser(object):
         验证上传的图片尺寸是否小于最小限制
         """
 
-        for image in self.files:
-            w, h = get_image_dimensions(image)
-            if w < limit[0] or h < limit[1]:
-                self.err_code, self.error = 23, 'The pixel of this image is too small. {0} pixels of width and {1} pixels of height or larger is needed.'.format(*limit)
-                return False
-        return True
+        if not self._load():
+            return False
+
+        w, h = self.image.size
+        if w < limit[0] or h < limit[1]:
+            self.err_code, self.error = 23, 'The pixel of this image is too small. {0} pixels of width and {1} pixels of height or larger is needed.'.format(*limit)
+            return False
 
     def _save_dimensions(self, format=None):
         dims = self.config.get('dimensions')
