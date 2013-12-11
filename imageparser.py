@@ -9,8 +9,6 @@ import os
 import Image
 import ImageFile
 
-from django.core.files.images import get_image_dimensions
-
 
 class ImageIOTools(object):
     """
@@ -189,10 +187,10 @@ class ImageTrimTools(object):
 
         x, y = img.size
 
-        if x > y and width or not height:
+        if width:
             x_s = width
             y_s = y * x_s / x
-        elif x <= y and height:
+        elif height:
             y_s = height
             x_s = x * y_s / y
         else:
@@ -358,8 +356,12 @@ class ImageParser(object):
                 manipulated = ImageTrimTools.auto_crop(self.image, width, height)
             elif action == 'scale':
                 # 缩放图片并保持原比例
+                print 'scale:', width, height
                 manipulated = ImageTrimTools.scale(self.image, width, height)
             else:
+                continue
+
+            if not manipulated:
                 continue
 
             result = ImageIOTools.save(manipulated, tdir, self.filename, format, quality)
