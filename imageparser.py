@@ -15,13 +15,12 @@ from django.core.files.images import get_image_dimensions
 class ImageIOTools(object):
     """
     该类提供一些常用的图片I/O操作方法，包括解析远程图片，打开或关闭本地图片等.
-    注：所有的方法均未拦截错误，如有必要，请在上层处理.
     """
 
     @classmethod
     def parse(cls, tfile):
         """
-        解析远程图片文件, 生成Image类型对象返回.
+        解析远程图片文件, 生成Image类型对象返回
         params:
             file: 从request.FILES中获取的数据对象
 
@@ -43,7 +42,7 @@ class ImageIOTools(object):
     @classmethod
     def open(cls, tfile):
         """
-        通过指定的路径名和文件名打开文件系统内的图片.
+        通过指定的路径名和文件名打开文件系统内的图片
         params:
             path: 文件所在的主目录
             filename：文件名
@@ -62,7 +61,7 @@ class ImageIOTools(object):
     @classmethod
     def save(cls, image, path, filename, format=None, quality=100):
         """
-        保存Image对象到文件系统.
+        保存Image对象到文件系统
 
         params:
             image：PIL Image Object
@@ -380,6 +379,13 @@ class ImageParser(object):
         return True
 
     def save(self, filename='', format=None, save_origin=True):
+        """
+        保存各尺寸图片，接收三个可选参数：
+            filename：要保存的文件名，默认为原文件名；
+            format：保存的格式，默认为原格式；
+            save_origin：布尔值，指定是否保存原图，默认为True。
+        """
+
         self.filename = filename if filename else self.filename
 
         if self.handle_by == 'buffer' and save_origin:
