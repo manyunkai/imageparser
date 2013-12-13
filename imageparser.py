@@ -84,7 +84,7 @@ class ImageParser(object):
 
         if self.handle_by == 'buffer':
             # 如果来自上传，则校验有效性
-            for name, limit in self.config.get('limits').iteritems():
+            for name, limit in self.config.get('limits', {}).iteritems():
                 func = getattr(self, 'check_' + name, None)
                 if func and not func(limit):
                     return False
